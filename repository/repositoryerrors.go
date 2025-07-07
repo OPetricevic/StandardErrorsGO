@@ -1,8 +1,7 @@
-package common
+package repositoryerrors
 
 import (
-	"errors" // Import the errors package
-	"fmt"
+	"errors"
 )
 
 var (
@@ -25,34 +24,3 @@ var (
 	ErrLengthRequired       = errors.New("length required")
 	ErrInsufficientStorage  = errors.New("insufficient storage")
 )
-
-type ErrInvalidUUID struct {
-	Value string
-}
-
-type ErrPathBodyMismatchedValue struct {
-	PathFieldName string
-	PathValue     any
-	BodyValue     any
-}
-
-func (e ErrInvalidUUID) Error() string {
-	return fmt.Sprintf("the value %q is an invalid UUID", e.Value)
-}
-
-func (e ErrPathBodyMismatchedValue) Error() string {
-	return fmt.Sprintf("the value for the path parameter %q does not match the value from the body (%v != %v)", e.PathFieldName, e.PathValue, e.BodyValue)
-}
-
-// ErrUUIDValidationFailed is a reusable error for when UUID validation fails for multiple fields.
-type ErrUUIDValidationFailed struct {
-	InvalidUUIDs map[string]string
-}
-
-func (e ErrUUIDValidationFailed) Error() string {
-	var result string
-	for field, uuid := range e.InvalidUUIDs {
-		result += fmt.Sprintf("invalid UUID for %s: %q; ", field, uuid)
-	}
-	return result
-}
